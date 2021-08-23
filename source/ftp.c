@@ -61,6 +61,8 @@
 #define DATA_PORT       0 /* ephemeral port */
 #endif
 
+PadState s_padState;
+
 typedef struct ftp_session_t ftp_session_t;
 
 #define FTP_DECLARE(x) static void x(ftp_session_t *session, const char *args)
@@ -1926,7 +1928,7 @@ ftp_init(void)
   {
     ret = 0;
 
-    hidScanInput();
+    //hidScanInput();
     if(hidKeysDown() & KEY_B)
     {
       /* user canceled */
@@ -2147,7 +2149,7 @@ ftp_loop(void)
 
 #ifdef _3DS
   /* check if the user wants to exit */
-  hidScanInput();
+  //hidScanInput();
   u32 down = hidKeysDown();
 
   if(down & KEY_B)
@@ -2161,10 +2163,12 @@ ftp_loop(void)
   }
 #elif defined(__SWITCH__)
   /* check if the user wants to exit */
-  hidScanInput();
-  u32 down = hidKeysDown(CONTROLLER_P1_AUTO);
+  //hidScanInput();
+  padUpdate (&s_padState);
 
-  if(down & KEY_B)
+  auto const keys = padGetButtons (&s_padState);
+
+  if (keys & HidNpadButton_Plus)
     return LOOP_EXIT;
 #endif
 

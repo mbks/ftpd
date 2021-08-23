@@ -18,6 +18,8 @@
  *
  *  @returns loop status
  */
+
+PadState s_padState_main;
 static loop_status_t
 loop(loop_status_t (*callback)(void))
 {
@@ -57,7 +59,7 @@ static loop_status_t
 wait_for_b(void)
 {
   /* update button state */
-  hidScanInput();
+  //hidScanInput();
 
   /* check if B was pressed */
   if(hidKeysDown() & KEY_B)
@@ -75,10 +77,13 @@ static loop_status_t
 wait_for_b(void)
 {
   /* update button state */
-  hidScanInput();
+  //hidScanInput();
 
-  /* check if B was pressed */
-  if(hidKeysDown(CONTROLLER_P1_AUTO) & KEY_B)
+  padUpdate (&s_padState_main);
+
+  auto const keys = padGetButtons (&s_padState_main);
+
+  if (keys & HidNpadButton_Plus)
     return LOOP_EXIT;
 
   /* B was not pressed */
@@ -107,7 +112,7 @@ main(int  argc,
   sdmcWriteSafe(false);
   /* initialize needed Switch services */
 #elif defined(__SWITCH__)
-  nifmInitialize();
+  nifmInitialize(NifmServiceType_User);
 #endif
 
   /* initialize console subsystem */
