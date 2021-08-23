@@ -1,3 +1,5 @@
+This fork recompiles an older version (2.3.0) with the latest switch dev toolkit since the older version crashed on the latest atmosphere but the newer versions of ftpd are missing some FTP commands that I need. See v2.3.0-updated branch
+
 # ftpd
 
 FTP Server for 3DS/Switch/Linux.
